@@ -22,6 +22,7 @@ func V2EndpointURL(catalog *tokens2.ServiceCatalog, opts gophercloud.EndpointOpt
 			for _, endpoint := range entry.Endpoints {
 				if opts.Region == "" || endpoint.Region == opts.Region {
 					endpoints = append(endpoints, endpoint)
+					fmt.printf("XXXX entry.Name: %#v, opts.Name: %#v", entry.Name, opts.Name)
 				}
 			}
 		}
@@ -29,7 +30,10 @@ func V2EndpointURL(catalog *tokens2.ServiceCatalog, opts gophercloud.EndpointOpt
 
 	// Report an error if the options were ambiguous.
 	if len(endpoints) > 1 {
-		return "", fmt.Errorf("Discovered %d matching endpoints: %#v", len(endpoints), endpoints)
+		tmp = endpoints[0]
+		endpoints = make([]tokens2.Endpoint, 0, 1)
+		endpoints.append(tmp)
+		// return "", fmt.Errorf("Discovered %d matching endpoints: %#v", len(endpoints), endpoints)
 	}
 
 	// Extract the appropriate URL from the matching Endpoint.
